@@ -1,11 +1,16 @@
 package ru.stan.criminalintent
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.stan.criminalintent.databinding.ListItemCrimeBinding
 import ru.stan.criminalintent.databinding.ListItemSeriousCrimeBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class CrimeHolder(
@@ -27,10 +32,13 @@ class CrimeHolder(
 
 class SeriousCrimeHolder(
     val binding: ListItemSeriousCrimeBinding
-): RecyclerView.ViewHolder(binding.root){
-    fun bind(crime: Crime){
+) : RecyclerView.ViewHolder(binding.root) {
+
+    private val dataFormat =SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
+
+    fun bind(crime: Crime) {
         binding.crimeTitle.text = crime.title
-        binding.crimeDate.text = crime.data.toString()
+        binding.crimeDate.text = dataFormat.format(crime.data)
         binding.contactPoliceButton.setOnClickListener {
             Toast.makeText(
                 binding.root.context,
@@ -50,10 +58,10 @@ class SeriousCrimeHolder(
 
 class CrimeSeriousAdapter(
     private val crimes: List<Crime>
-): RecyclerView.Adapter<SeriousCrimeHolder>(){
+) : RecyclerView.Adapter<SeriousCrimeHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriousCrimeHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ListItemSeriousCrimeBinding.inflate(inflater,parent,false)
+        val binding = ListItemSeriousCrimeBinding.inflate(inflater, parent, false)
         return SeriousCrimeHolder(binding)
     }
 
@@ -64,12 +72,11 @@ class CrimeSeriousAdapter(
         holder.apply {
             binding.crimeTitle.text = crime.title
             binding.crimeDate.text = crime.data.toString()
-            binding.contactPoliceButton.setOnClickListener {
-                Toast.makeText(
-                    binding.root.context,
-                    R.string.contact_police_clicked,
-                    Toast.LENGTH_SHORT
-                ).show()
+
+            binding.crimeSolved.visibility = if (crime.isSolved) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
         }
         holder.bind(crime)
