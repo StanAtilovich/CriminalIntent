@@ -29,13 +29,14 @@ class CrimeListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
         binding.crimeRecyclewView.layoutManager = LinearLayoutManager(context)
 
         val crimes = crimeListViewModel.crimes
-        val adapter = CrimeListAdapter(crimes)
+       val adapter = CrimeSeriousAdapter(crimes)
+        // val adapter = CrimeListAdapter(crimes)
         binding.crimeRecyclewView.adapter = adapter
         return binding.root
     }

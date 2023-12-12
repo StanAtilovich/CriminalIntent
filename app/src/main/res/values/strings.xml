@@ -9,4 +9,5 @@
     <string name="contact_police">Contact Police</string>
     <string name="crime_clicked">Serious %s clicked!</string>
     <string name="contact_police_clicked">Serious %s clicked, contact police!</string>
+    <string name="requiresPolice">requires Police</string>
 </resources>
