@@ -11,15 +11,12 @@ import java.util.Date
 import java.util.UUID
 
 class CrimeDetailFragment : Fragment() {
-
-    // Create a nullable backing property (called _binding) and change the property to become a computed property
     private var _binding: FragmentCrimeDetailBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
 
-    // Add a property for the Crime instance
     private lateinit var crime: Crime
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +33,7 @@ class CrimeDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding =
             FragmentCrimeDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -46,7 +43,7 @@ class CrimeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            crimeTitle.doOnTextChanged { text, _, _, _ ->   // lambda arguments named _ are ignored; we only care about text
+            crimeTitle.doOnTextChanged { text, _, _, _ ->
                 crime = crime.copy(title = text.toString())
             }
 
@@ -61,7 +58,6 @@ class CrimeDetailFragment : Fragment() {
         }
     }
 
-    // Null out references to the view
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

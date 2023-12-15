@@ -25,7 +25,6 @@ class CrimeHolder(
             ).show()
         }
 
-        // If the crime is solved, make the crimeSolved ImageView visible; else make it gone
         binding.crimeSolved.visibility = if (crime.isSolved) {
             View.VISIBLE
         } else {
