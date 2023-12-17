@@ -47,9 +47,9 @@ class CrimeListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 crimeListViewModel.crimes.collect { crimes ->
                     binding.crimeRecyclerView.adapter =
-                        CrimeListAdapter(crimes){
+                        CrimeListAdapter(crimes){crimeId->
                             findNavController().navigate(
-                                R.id.show_crime_detail
+                            CrimeListFragmentDirections.showCrimeDetail(crimeId)
                             )
                         }
                 }
