@@ -9,11 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
 import ru.stan.criminalintent.databinding.FragmentCrimeListBinding
-
-
 
 
 class CrimeListFragment : Fragment() {
@@ -32,7 +31,7 @@ class CrimeListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
 
@@ -48,7 +47,11 @@ class CrimeListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 crimeListViewModel.crimes.collect { crimes ->
                     binding.crimeRecyclerView.adapter =
-                        CrimeListAdapter(crimes)
+                        CrimeListAdapter(crimes){
+                            findNavController().navigate(
+                                R.id.show_crime_detail
+                            )
+                        }
                 }
             }
         }
