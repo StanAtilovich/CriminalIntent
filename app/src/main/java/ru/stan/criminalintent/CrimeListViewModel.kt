@@ -19,10 +19,13 @@ class CrimeListViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            // 12.28
             crimeRepository.getCrimes().collect {
                 _crimes.value = it
             }
         }
+    }
+
+    suspend fun addCrime(crime: Crime){
+        crimeRepository.addCrime(crime)
     }
 }

@@ -11,4 +11,5 @@
     <string name="contact_police_clicked">Serious %s clicked, contact police!</string>
     <string name="requiresPolice">requires Police</string>
     <string name="write_crime">Введите заголовок преступления</string>
+    <string name="new_crime">New Crime</string>
 </resources>
