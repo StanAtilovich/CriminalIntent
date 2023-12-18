@@ -18,7 +18,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import ru.stan.criminalintent.databinding.FragmentCrimeDetailBinding
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 private const val TAG = "CrimeDetailFragment"
@@ -110,6 +112,14 @@ class CrimeDetailFragment : Fragment() {
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
 
+        setFragmentResultListener(
+            TimePickerFragment.REQUEST_KEY_TIME
+        ) { _, bundle ->
+            val newTime =
+                bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
+            crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
+        }
+
     }
 
     override fun onDestroyView() {
@@ -128,7 +138,19 @@ class CrimeDetailFragment : Fragment() {
                     CrimeDetailFragmentDirections.selectDate(crime.date)
                 )
             }
+            crimeTime.text = formatDate(crime.date, "HH:mm zz")
+            crimeTime.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.selectTime(crime.date)
+                )
+            }
+
             crimeSolved.isChecked = crime.isSolved
         }
+    }
+
+    private fun formatDate(date: Date, pattern: String): String {
+        val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+        return formatter.format(date)
     }
 }
