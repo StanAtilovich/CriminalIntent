@@ -14,7 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import kotlinx.coroutines.launch
+import ru.stan.criminalintent.database.CrimeDatabase
 import ru.stan.criminalintent.databinding.FragmentCrimeListBinding
 import java.util.Date
 import java.util.UUID
@@ -42,6 +44,25 @@ class CrimeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCrimeListBinding.inflate(inflater, container, false)
+        val crimeDatabase = Room.databaseBuilder(
+            requireContext(),
+            CrimeDatabase::class.java, "crime-database"
+        ).build()
+        val crimeDao = crimeDatabase.crimeDao()
+        val crimeList = crimeDao.getCrimes()
+
+        lifecycleScope.launch {
+            crimeList.collect { crimes ->
+                if (crimes.isNullOrEmpty()) {
+                    binding.crimeRecyclerView
+                    binding.emptyMessageTextView.visibility = View.VISIBLE
+                    binding.add.visibility = View.VISIBLE
+                } else {
+                    binding.emptyMessageTextView.visibility = View.GONE
+                    binding.add.visibility =View.GONE
+                }
+            }
+        }
 
 
         binding.crimeRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -56,13 +77,16 @@ class CrimeListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 crimeListViewModel.crimes.collect { crimes ->
                     binding.crimeRecyclerView.adapter =
-                        CrimeListAdapter(crimes){crimeId->
+                        CrimeListAdapter(crimes) { crimeId ->
                             findNavController().navigate(
-                            CrimeListFragmentDirections.showCrimeDetail(crimeId)
+                                CrimeListFragmentDirections.showCrimeDetail(crimeId)
                             )
                         }
                 }
             }
+        }
+        binding.add.setOnClickListener {
+            showNewCrime()
         }
     }
 
@@ -77,16 +101,17 @@ class CrimeListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.new_crime ->{
+        return when (item.itemId) {
+            R.id.new_crime -> {
                 showNewCrime()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun showNewCrime(){
+    private fun showNewCrime() {
         viewLifecycleOwner.lifecycleScope.launch {
             val newCrime = Crime(
                 id = UUID.randomUUID(),
