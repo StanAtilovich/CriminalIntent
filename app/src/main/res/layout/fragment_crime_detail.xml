@@ -52,4 +52,5 @@
             tools:text="11:56 EST"
             android:layout_weight="1"/>
     </LinearLayout>
+
 </LinearLayout>

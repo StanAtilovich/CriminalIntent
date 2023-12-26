@@ -29,6 +29,14 @@ class CrimeDetailViewModel(crimeId: UUID) : ViewModel() {
     }
 
 
+    suspend fun deleteCrime(crime: Crime) {
+        crimeRepository.deleteCrime(crime)
+    }
+    suspend fun getCrime(id: UUID): Crime {
+       return crimeRepository.getCrime(id)
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         crime.value?.let { crimeRepository.updateCrime(it) }
@@ -42,4 +50,5 @@ class CrimeDetailViewModel(crimeId: UUID) : ViewModel() {
             return CrimeDetailViewModel(crimeId) as T
         }
     }
+
 }

@@ -1,12 +1,13 @@
 package ru.stan.criminalintent.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.stan.criminalintent.Crime
-import java.util.*
+import java.util.UUID
 
 
 @Dao
@@ -23,4 +24,8 @@ interface CrimeDao {
 
     @Insert
     suspend fun addCrime(crime: Crime)
+
+    @Delete
+    suspend fun deleteCrime(crime: Crime)
+
 }

@@ -63,11 +63,7 @@ class CrimeListFragment : Fragment() {
                 }
             }
         }
-
-
         binding.crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-
-
         return binding.root
     }
 
@@ -89,6 +85,7 @@ class CrimeListFragment : Fragment() {
             showNewCrime()
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -125,4 +122,7 @@ class CrimeListFragment : Fragment() {
             )
         }
     }
+
+
+
 }

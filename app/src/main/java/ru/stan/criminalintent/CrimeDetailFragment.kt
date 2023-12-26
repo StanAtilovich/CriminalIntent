@@ -3,6 +3,9 @@ package ru.stan.criminalintent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -48,6 +51,7 @@ class CrimeDetailFragment : Fragment() {
             isSolved = false
         )
         Log.d(TAG, "The crime ID is: ${args.crimeId}")
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -120,6 +124,31 @@ class CrimeDetailFragment : Fragment() {
             crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
         }
 
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_crime -> {
+                deleteCrime(args.crimeId)
+                findNavController().popBackStack()
+                true
+            }
+
+            else -> super.onContextItemSelected(item)
+        }
+    }
+    private fun deleteCrime(id: UUID) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val crime = crimeDetailViewModel.getCrime(id)
+            crimeDetailViewModel.deleteCrime(crime)
+        }
+        Toast.makeText(requireContext(), "Crime deleted.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
