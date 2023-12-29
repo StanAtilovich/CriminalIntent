@@ -1,5 +1,6 @@
 package ru.stan.criminalintent
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -33,6 +34,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
+
 private const val TAG = "CrimeDetailFragment"
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -54,7 +56,6 @@ class CrimeDetailFragment : Fragment() {
     ) { uri: Uri? ->
         uri?.let { parseContactSelection(it) }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -220,6 +221,58 @@ class CrimeDetailFragment : Fragment() {
                 getString(R.string.crime_suspect_text)
             }
 
+            call.setOnClickListener {
+                val contactUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+
+                val projection = arrayOf(
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                    ContactsContract.CommonDataKinds.Phone.NUMBER
+                )
+
+                val cursor = context?.contentResolver!!.query(
+                    contactUri,
+                    projection,
+                    null,
+                    null,
+                    null
+                )
+
+                cursor?.use {
+                    val contracts = mutableListOf<Pair<String, String>>()
+
+                    while (it.moveToNext()){
+                        val nameIndex = it.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+                        )
+                        val name = it.getString(nameIndex)
+                        val phoneNumberIndex = it.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER
+                        )
+                        val phoneNumber = it.getString(phoneNumberIndex)
+                        contracts.add(Pair(name , phoneNumber))
+                    }
+
+                    val items = contracts.map { "${it.first}: ${it.second}" }.toTypedArray()
+
+                    AlertDialog.Builder(context)
+                        .setTitle("Выбери номер")
+                        .setItems(items) {dialog, index ->
+                            val selectPhonenumber = contracts[index].second
+
+                            val intent = Intent(Intent.ACTION_DIAL)
+                            intent.data = Uri.parse("tel: $selectPhonenumber")
+                            startActivity(intent)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("Отмена") {dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+
+                cursor?.close()
+            }
+
         }
     }
 
@@ -264,8 +317,8 @@ class CrimeDetailFragment : Fragment() {
         }
     }
 
-    private fun canResolvelIntent(intent: Intent): Boolean{
-       // intent.addCategory(Intent.CATEGORY_HOME) закрывает наше намериние и кнопка не высвечивается
+    private fun canResolvelIntent(intent: Intent): Boolean {
+        // intent.addCategory(Intent.CATEGORY_HOME) закрывает наше намериние и кнопка не высвечивается
         val peckageManager: PackageManager = requireActivity().packageManager
         val resolvedActivity: ResolveInfo? =
             peckageManager.resolveActivity(
