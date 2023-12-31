@@ -3,9 +3,9 @@ package ru.stan.criminalintent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.stan.criminalintent.databinding.ListItemCrimeBinding
+import java.util.UUID
 
 
 class CrimeHolder(
@@ -13,19 +13,14 @@ class CrimeHolder(
 
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(crime: Crime) {
+    fun bind(crime: Crime,onClicked:(crimeId: UUID)-> Unit) {
         binding.crimeTitle.text = crime.title
         binding.crimeDate.text = crime.date.toString()
 
         binding.root.setOnClickListener {
-            Toast.makeText(
-                binding.root.context,
-                "${crime.title} clicked!",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClicked(crime.id)
         }
 
-        // If the crime is solved, make the crimeSolved ImageView visible; else make it gone
         binding.crimeSolved.visibility = if (crime.isSolved) {
             View.VISIBLE
         } else {
@@ -35,7 +30,8 @@ class CrimeHolder(
 }
 
 class CrimeListAdapter(
-    private val crimes: List<Crime>
+    private val crimes: List<Crime>,
+    private val onClicked: (crimeId: UUID) -> Unit
 ) : RecyclerView.Adapter<CrimeHolder>() {
 
     override fun onCreateViewHolder(
@@ -50,7 +46,7 @@ class CrimeListAdapter(
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val crime = crimes[position]
 
-        holder.bind(crime)
+        holder.bind(crime, onClicked)
     }
 
     override fun getItemCount() = crimes.size

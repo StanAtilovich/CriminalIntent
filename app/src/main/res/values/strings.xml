@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">CriminalIntent</string>
     <string name="crime_title_hint">Enter a title for the crime.</string>
     <string name="crime_title_label">Title</string>
@@ -10,4 +10,19 @@
     <string name="crime_clicked">Serious %s clicked!</string>
     <string name="contact_police_clicked">Serious %s clicked, contact police!</string>
     <string name="requiresPolice">requires Police</string>
+    <string name="write_crime">Введите заголовок преступления</string>
+    <string name="new_crime">New Crime</string>
+    <string name="no_crimes_found">No crimes found</string>
+    <string name="add_crime" tools:ignore="ExtraTranslation">add_crime</string>
+    <string name="delete">DELETE</string>
+    <string name="crime_suspect_text">Choose Suspect</string>
+    <string name="crime_report_text">Send Crime Report</string>
+    <string name="crime_report">%1$s!The crime was discovered on %2$s. %3$s, and %4$s</string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect.</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Send crime report via</string>
+    <string name="call">Call</string>
 </resources>
