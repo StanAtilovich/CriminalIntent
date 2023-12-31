@@ -253,6 +253,7 @@ class CrimeDetailFragment : Fragment() {
                 startActivity(chooserIntent)
             }
 
+
             crimeSuspect.text = crime.suspect.ifEmpty {
                 getString(R.string.crime_suspect_text)
             }

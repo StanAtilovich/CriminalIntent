@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">CriminalIntent</string>
+    <string name="crime_title_hint">Введите название преступления.</string>
+    <string name="crime_title_label">Заголовок</string>
+    <string name="crime_details_label">Подробности</string>
+    <string name="crime_solved_label">Раскрыто</string>
+    <string name="crime_date">Дата преступления</string>
+    <string name="crime_title">Название преступления</string>
+    <string name="contact_police">Свяжитесь с полицией</string>
+    <string name="crime_clicked">Серьезные %s нажали!</string>
+    <string name="contact_police_clicked">Нажата серьезная кнопка %s, обратитесь в полицию!</string>
+    <string name="requiresPolice">требуется полиция</string>
+    <string name="write_crime">Введите заголовок преступления</string>
+    <string name="new_crime">Новое преступление</string>
+    <string name="no_crimes_found">Преступлений не обнаружено</string>
+    <string name="add_crime" tools:ignore="ExtraTranslation">добавить преступление</string>
+    <string name="delete">удалить</string>
+    <string name="crime_suspect_text">Выбрать подозреваемого</string>
+    <string name="crime_report_text">Отправить сообщение о преступлении</string>
+    <string name="crime_report">%1$!Преступление было раскрыто на %2$s. %3$s, и %4$s</string>
+    <string name="crime_report_solved">Дело раскрыто</string>
+    <string name="crime_report_unsolved">Дело не раскрыто</string>
+    <string name="crime_report_no_suspect">подозреваемого нет.</string>
+    <string name="crime_report_suspect">подозреваемый %s.</string>
+    <string name="crime_report_subject">Криминальный отчет о преступлении</string>
+    <string name="send_report">Отправить сообщение о преступлении с помощью</string>
+    <string name="call">Позвонить</string>
+    <string name="photo">Фото</string>
+</resources>
