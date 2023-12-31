@@ -18,6 +18,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -29,6 +31,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import ru.stan.criminalintent.databinding.FragmentCrimeDetailBinding
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -56,6 +59,18 @@ class CrimeDetailFragment : Fragment() {
     ) { uri: Uri? ->
         uri?.let { parseContactSelection(it) }
     }
+
+    private val takePhoto = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { didTakePhoto: Boolean ->
+        if (didTakePhoto && photoName != null){
+            crimeDetailViewModel.updateCrime { oldCrime ->
+                oldCrime.copy(photoFileName = photoName)
+            }
+        }
+    }
+
+    private var photoName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,6 +129,8 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
 
+
+
             crimeSuspect.setOnClickListener {
                 selectSuspect.launch(null)
             }
@@ -123,6 +140,26 @@ class CrimeDetailFragment : Fragment() {
             )
             crimeSuspect.isEnabled = canResolvelIntent(selectSuspectIntent)
 
+
+            crimeCamera.setOnClickListener {
+                photoName = "IMG_${Date()}.JPG"
+                val photoFile = File(
+                    requireContext().applicationContext.filesDir,
+                    photoName!!
+                )
+                val photoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "ru.stan.criminalintent.fileprovider",
+                    photoFile
+                )
+                takePhoto.launch(photoUri)
+            }
+
+            val captureImageIntent = takePhoto.contract.createIntent(
+                requireContext(),
+                Uri.parse("")
+            )
+            crimeCamera.isEnabled = canResolvelIntent(captureImageIntent)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -148,7 +185,6 @@ class CrimeDetailFragment : Fragment() {
                 bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
         }
-
 
     }
 
@@ -220,6 +256,14 @@ class CrimeDetailFragment : Fragment() {
             crimeSuspect.text = crime.suspect.ifEmpty {
                 getString(R.string.crime_suspect_text)
             }
+            updatePhoto(crime.photoFileName)
+
+            crimePhoto.setOnClickListener {
+                val photoFragment = crime.photoFileName?.let {
+                    PhotoFragment.newInstance(it)
+                }
+                photoFragment?.show(childFragmentManager, null)
+            }
 
             call.setOnClickListener {
                 val contactUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
@@ -240,7 +284,7 @@ class CrimeDetailFragment : Fragment() {
                 cursor?.use {
                     val contracts = mutableListOf<Pair<String, String>>()
 
-                    while (it.moveToNext()){
+                    while (it.moveToNext()) {
                         val nameIndex = it.getColumnIndex(
                             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                         )
@@ -249,14 +293,14 @@ class CrimeDetailFragment : Fragment() {
                             ContactsContract.CommonDataKinds.Phone.NUMBER
                         )
                         val phoneNumber = it.getString(phoneNumberIndex)
-                        contracts.add(Pair(name , phoneNumber))
+                        contracts.add(Pair(name, phoneNumber))
                     }
 
                     val items = contracts.map { "${it.first}: ${it.second}" }.toTypedArray()
 
                     AlertDialog.Builder(context)
                         .setTitle("Выбери номер")
-                        .setItems(items) {dialog, index ->
+                        .setItems(items) { dialog, index ->
                             val selectPhonenumber = contracts[index].second
 
                             val intent = Intent(Intent.ACTION_DIAL)
@@ -264,7 +308,7 @@ class CrimeDetailFragment : Fragment() {
                             startActivity(intent)
                             dialog.dismiss()
                         }
-                        .setNegativeButton("Отмена") {dialog, _ ->
+                        .setNegativeButton("Отмена") { dialog, _ ->
                             dialog.dismiss()
                         }
                         .show()
@@ -318,13 +362,38 @@ class CrimeDetailFragment : Fragment() {
     }
 
     private fun canResolvelIntent(intent: Intent): Boolean {
-        // intent.addCategory(Intent.CATEGORY_HOME) закрывает наше намериние и кнопка не высвечивается
         val peckageManager: PackageManager = requireActivity().packageManager
         val resolvedActivity: ResolveInfo? =
-            peckageManager.resolveActivity(
+            peckageManager.resolveActivity (
                 intent,
                 PackageManager.MATCH_DEFAULT_ONLY
             )
         return resolvedActivity != null
     }
+
+    private fun updatePhoto(photoFileName: String?) {
+        if (binding.crimePhoto.tag != photoFileName) {
+            val photoFile = photoFileName?.let {
+                File(requireContext().applicationContext.filesDir, it)
+            }
+
+            if (photoFile?.exists() == true) {
+                binding.crimePhoto.doOnLayout { measuredView ->
+                    val scaledBitmap = getScaledBitmap(
+                        photoFile.path,
+                        measuredView.width,
+                        measuredView.height
+                    )
+                    binding.crimePhoto.setImageBitmap(scaledBitmap)
+                    binding.crimePhoto.tag = photoFileName
+                }
+            } else {
+                binding.crimePhoto.setImageBitmap(null)
+                binding.crimePhoto.tag = null
+            }
+        }
+    }
+
 }
+
+
