@@ -61,9 +61,8 @@
         android:text="@string/crime_solved_label" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_weight="0"
         android:orientation="horizontal">
 
         <Button
@@ -75,7 +74,7 @@
 
         <Button
             android:id="@+id/crime_time"
-            android:layout_width="130dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             tools:text="11:56 EST" />
@@ -100,5 +99,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/call"/>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/backButton" />
 
 </LinearLayout>
