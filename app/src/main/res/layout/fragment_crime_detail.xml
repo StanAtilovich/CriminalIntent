@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:contentDescription="@string/crime_photo_no_image_description"
             android:layout_marginEnd="16dp">
 
             <ImageView
@@ -29,7 +30,8 @@
                 android:id="@+id/crime_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_camera"/>
+                android:src="@drawable/ic_camera"
+                android:contentDescription="@string/crime_photo_button_description"/>
         </LinearLayout>
     </LinearLayout>
 

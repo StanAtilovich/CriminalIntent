@@ -10,7 +10,7 @@
     <string name="crime_clicked">Serious %s clicked!</string>
     <string name="contact_police_clicked">Serious %s clicked, contact police!</string>
     <string name="requiresPolice">requires Police</string>
-    <string name="write_crime">Введите заголовок преступления</string>
+    <string name="write_crime">Enter the title of the crime</string>
     <string name="new_crime">New Crime</string>
     <string name="no_crimes_found">No crimes found</string>
     <string name="add_crime" tools:ignore="ExtraTranslation">add_crime</string>
@@ -26,5 +26,12 @@
     <string name="send_report">Send crime report via</string>
     <string name="call">Call</string>
     <string name="photo">photo</string>
-    <string name="backButton">Назад</string>
+    <string name="backButton" translatable="false">back</string>
+    <string name="crime_photo_button_description">Take photo of crime scene</string>
+    <string name="crime_photo_no_image_description">Crime scene photo (not set)</string>
+    <string name="crime_photo_image_description">Crime scene photo (set)</string>
+    <string name="crime_report_summary">%1$s! The crime was discovered on %2$s. %3$s </string>
+    <string name="date">Date</string>
+    <string name="suspect">Suspect</string>
+    <string name="report">Report</string>
 </resources>

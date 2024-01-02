@@ -27,4 +27,11 @@
     <string name="send_report">Отправить сообщение о преступлении с помощью</string>
     <string name="call">Позвонить</string>
     <string name="photo">Фото</string>
+    <string name="crime_photo_button_description">Сфотографировать место преступления</string>
+    <string name="crime_photo_no_image_description">Фотография с места преступления (не установлена)</string>
+    <string name="crime_photo_image_description">Фотография с места преступления (установлена)</string>
+    <string name="crime_report_summary">%1$s! Преступление было обнаружено %2$s. %3$s </string>
+    <string name="date">Дата</string>
+    <string name="suspect">Подозреваемый</string>
+    <string name="report">Отчет</string>
 </resources>
