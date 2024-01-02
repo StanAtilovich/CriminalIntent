@@ -185,6 +185,9 @@ class CrimeDetailFragment : Fragment() {
                 bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
         }
+        binding.backButton.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
     }
 
@@ -223,7 +226,8 @@ class CrimeDetailFragment : Fragment() {
             if (crimeTitle.text.toString() != crime.title) {
                 crimeTitle.setText(crime.title)
             }
-            crimeDate.text = crime.date.toString()
+           // crimeDate.text = crime.date.toString()
+            crimeDate.text = localizeDate(crime.date)
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)
@@ -333,7 +337,8 @@ class CrimeDetailFragment : Fragment() {
             getString(R.string.crime_report_unsolved)
         }
 
-        val dateString = DateFormat.format(DATE_FORMAT, crime.date).toString()
+       // val dateString = DateFormat.format(DATE_FORMAT, crime.date).toString()
+        val dateString = localizeDate(crime.date)
         val suspectText = if (crime.suspect.isBlank()) {
             getString(R.string.crime_report_no_suspect)
         } else {
@@ -360,6 +365,12 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
         }
+    }
+    private fun localizeDate(date: Date): String {
+        val locale = Locale.CHINESE
+        val df = DateFormat.getBestDateTimePattern(locale, DATE_FORMAT)
+        val sdf = SimpleDateFormat(df, locale)
+        return sdf.format(date)
     }
 
     private fun canResolvelIntent(intent: Intent): Boolean {
